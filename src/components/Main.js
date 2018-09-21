@@ -11,7 +11,7 @@ class Main extends React.Component {
     let close = <div className="close" onClick={() => {this.props.onCloseArticle()}}></div>
 
     return (
-      <div id="main" style={this.props.timeout ? {display: 'flex'} : {display: 'none'}}>
+      <div ref={this.props.setWrapperRef} id="main" style={this.props.timeout ? {display: 'flex'} : {display: 'none'}}>
 
         <article id="intro" className={`${this.props.article === 'intro' ? 'active' : ''} ${this.props.articleTimeout ? 'timeout' : ''}`} style={{display:'none'}}>
           <h2 className="major">Intro</h2>
@@ -75,7 +75,8 @@ Main.propTypes = {
   article: PropTypes.string,
   articleTimeout: PropTypes.bool,
   onCloseArticle: PropTypes.func,
-  timeout: PropTypes.bool
+  timeout: PropTypes.bool,
+  setWrapperRef: PropTypes.func.isRequired,
 }
 
 export default Main
