@@ -17,18 +17,26 @@ class IndexPage extends React.Component {
     }
     this.handleOpenArticle = this.handleOpenArticle.bind(this)
     this.handleCloseArticle = this.handleCloseArticle.bind(this)
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
   componentDidMount () {
     this.timeoutId = setTimeout(() => {
         this.setState({loading: ''});
     }, 100);
+    document.addEventListener('mousedown', this.handleClickOutside);
   }
 
   componentWillUnmount () {
     if (this.timeoutId) {
         clearTimeout(this.timeoutId);
     }
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
   }
 
   handleOpenArticle(article) {
@@ -73,6 +81,14 @@ class IndexPage extends React.Component {
 
   }
 
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      if (this.state.isArticleVisible) {
+        this.handleCloseArticle();
+      }
+    }
+  }
+
   render() {
     return (
       <Layout location={this.props.location}>
@@ -85,6 +101,7 @@ class IndexPage extends React.Component {
               articleTimeout={this.state.articleTimeout}
               article={this.state.article}
               onCloseArticle={this.handleCloseArticle}
+              setWrapperRef={this.setWrapperRef}
             />
             <Footer timeout={this.state.timeout} />
           </div>
